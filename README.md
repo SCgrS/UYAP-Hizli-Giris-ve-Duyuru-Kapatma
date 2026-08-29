@@ -50,3 +50,7 @@ Eklenti bildirimini görüp tıkladığınız sürece kapatılan duyuruları yuk
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 x.com/CgrShn 'den benimle iletişime geçebilirsiniz.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Lisans: MIT. Ayrıntılar için LICENSE dosyasına bakınız.

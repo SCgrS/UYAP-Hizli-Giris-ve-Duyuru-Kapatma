@@ -3,17 +3,16 @@ const OFFSCREEN_URL = "offscreen.html";
 
 function getDefaultState() {
     // Her çağrıda taze bir nesne döner.
-    // NOT: announcementCloseCounts artık burada YOK. Sayaçlar
-    // chrome.storage.session'a taşındı (aşağıdaki açıklamaya bakın).
+    // NOT: closedMessages, badgeCount ve announcementCloseCounts burada YOK.
+    // Bunlar chrome.storage.session'a taşındı; diske hiç yazılmazlar
+    // (aşağıdaki açıklamaya bakın). Burada yalnızca ayarlar tutulur.
     return {
         masterEnabled: true,
         quickLoginEnabled: true,
         announcementsEnabled: true,
         menuHideEnabled: false,
         soundEnabled: true,
-        soundFrequency: 5,
-        badgeCount: 0,
-        closedMessages: []
+        soundFrequency: 5
     };
 }
 
@@ -28,14 +27,15 @@ function getState() {
     return chrome.storage.local.get(getDefaultState());
 }
 
-function updateBadgeFrom(state) {
+function updateBadgeFrom(state, badgeCount) {
     const effectiveActive = state.masterEnabled &&
         (state.quickLoginEnabled || state.announcementsEnabled || state.menuHideEnabled);
     chrome.action.setIcon({ path: effectiveActive ? ICONS_ON : ICONS_OFF });
 
     const announcementsActive = state.masterEnabled && state.announcementsEnabled;
-    if (announcementsActive && state.badgeCount > 0) {
-        chrome.action.setBadgeText({ text: state.badgeCount.toString() });
+    const count = parseInt(badgeCount, 10) || 0;
+    if (announcementsActive && count > 0) {
+        chrome.action.setBadgeText({ text: count.toString() });
         chrome.action.setBadgeBackgroundColor({ color: "#b8382c" });
     } else {
         chrome.action.setBadgeText({ text: "" });
@@ -118,7 +118,10 @@ async function playBeepInBackground() {
 }
 
 /* ------------------------------------------------------------------ */
-/* SAYAÇ: chrome.storage.session                                       */
+/* OTURUM VERİSİ: chrome.storage.session                               */
+/*                                                                     */
+/* Duyuru metinleri (closedMessages), rozet sayacı (badgeCount) ve      */
+/* kapatma sayaçları burada tutulur; hiçbiri diske yazılmaz.           */
 /*                                                                     */
 /* İstenen davranış: aynı duyuruyu kaçıncı kez kapattığımız; sekme      */
 /* değişse de, sayfa yenilense de, duyuru okunsa da okunmasa da sabit   */
@@ -129,6 +132,52 @@ async function playBeepInBackground() {
 /* ------------------------------------------------------------------ */
 
 const SESSION_COUNT_KEY = "announcementCloseCounts";
+const SESSION_LOG_KEY = "closedMessages";
+const SESSION_BADGE_KEY = "badgeCount";
+
+/* Session storage kullanılamazsa (çok nadir) devreye giren bellek yedekleri.
+   Bunlar da service worker ile birlikte yaşar, diske hiç yazılmaz. */
+let memoryLogs = [];
+let memoryBadge = 0;
+
+async function getSessionLogs() {
+    try {
+        const data = await chrome.storage.session.get({ [SESSION_LOG_KEY]: [] });
+        const logs = data[SESSION_LOG_KEY];
+        return Array.isArray(logs) ? logs.slice() : [];
+    } catch (e) {
+        return memoryLogs.slice();
+    }
+}
+
+async function setSessionLogs(logs) {
+    memoryLogs = logs.slice();
+    try {
+        await chrome.storage.session.set({ [SESSION_LOG_KEY]: logs });
+    } catch (e) { /* yoksay */ }
+}
+
+async function getBadgeCount() {
+    try {
+        const data = await chrome.storage.session.get({ [SESSION_BADGE_KEY]: 0 });
+        return parseInt(data[SESSION_BADGE_KEY], 10) || 0;
+    } catch (e) {
+        return memoryBadge;
+    }
+}
+
+async function setBadgeCount(value) {
+    memoryBadge = value;
+    try {
+        await chrome.storage.session.set({ [SESSION_BADGE_KEY]: value });
+    } catch (e) { /* yoksay */ }
+}
+
+/* Rozeti güncel ayarlar + güncel oturum sayacıyla tazeler. */
+async function refreshBadge(state) {
+    const settings = state || await getState();
+    updateBadgeFrom(settings, await getBadgeCount());
+}
 
 async function bumpCloseCount(text) {
     const key = (text || "").trim();
@@ -153,18 +202,20 @@ async function handleSaveLog(request, sendResponse) {
     try {
         const state = await getState();
 
-        const badgeCount = (state.badgeCount || 0) + 1;
-        const closedMessages = Array.isArray(state.closedMessages) ? state.closedMessages.slice() : [];
+        // Duyuru metinleri ve rozet sayacı YALNIZCA oturum belleğinde tutulur;
+        // chrome.storage.local (yani disk) bunlar için hiç kullanılmaz. Tüm
+        // Chrome pencereleri kapandığında kendiliğinden silinirler.
+        const badgeCount = (await getBadgeCount()) + 1;
+        const closedMessages = await getSessionLogs();
         closedMessages.push({
             time: new Date().toLocaleTimeString("tr-TR"),
             text: request.text
         });
         while (closedMessages.length > LOG_LIMIT) closedMessages.shift();
 
-        // Yalnızca değişen anahtarları yaz: toggle anahtarlarını gereksiz yere
-        // yeniden yazmak content.js'teki storage dinleyicisini boş yere tetikler.
-        await chrome.storage.local.set({ badgeCount, closedMessages });
-        updateBadgeFrom(Object.assign({}, state, { badgeCount }));
+        await setBadgeCount(badgeCount);
+        await setSessionLogs(closedMessages);
+        updateBadgeFrom(state, badgeCount);
 
         const count = await bumpCloseCount(request.text);
         const frequency = parseInt(state.soundFrequency, 10) || 5;
@@ -190,16 +241,15 @@ async function handleSaveLog(request, sendResponse) {
 
 async function handleResetBadge(sendResponse) {
     try {
-        await chrome.storage.local.set({ badgeCount: 0 });
+        await setBadgeCount(0);
         const state = await getState();
-        updateBadgeFrom(state);
+        updateBadgeFrom(state, 0);
     } catch (e) { /* yoksay */ }
     sendResponse({ ok: true });
 }
 
 async function handleGetLogs(sendResponse) {
-    const state = await getState();
-    sendResponse({ logs: state.closedMessages });
+    sendResponse({ logs: await getSessionLogs() });
 }
 
 async function handleGetToggleState(sendResponse) {
@@ -256,7 +306,7 @@ async function handleSetToggleState(request, sendResponse) {
         soundFrequency: state.soundFrequency
     });
 
-    updateBadgeFrom(state);
+    await refreshBadge(state);
     sendResponse(state);
 }
 
@@ -285,9 +335,11 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 
 // Başlangıç
-chrome.storage.local.get(getDefaultState(), updateBadgeFrom);
-// Eski sürümden kalan, artık kullanılmayan kalıcı sayaçları temizle.
-chrome.storage.local.remove("announcementCloseCounts");
+refreshBadge();
+// Eski sürümlerden diskte kalmış olabilecek kayıtları temizle: duyuru
+// metinleri, rozet sayacı ve kapatma sayaçları artık yalnızca oturum
+// belleğinde tutuluyor, chrome.storage.local'de yer almıyor.
+chrome.storage.local.remove(["announcementCloseCounts", "closedMessages", "badgeCount"]);
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (!request || request.target === "offscreen") return; // offscreen'e ait mesaj

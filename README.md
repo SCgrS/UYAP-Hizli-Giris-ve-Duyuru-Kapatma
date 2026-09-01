@@ -33,8 +33,8 @@ Giriş ekranında duyuru varsa duyuruyu kapatarak duyuru yoksa doğrudan Adalet 
 Eklenti simgesine tıklandığında açılan anahtarlardan istenilen özellik ve doğrudan eklentini kendisi kolaylıkla açılıp kapanabilir.
 
 6) Hiçbir veri kaydetmez:
-Eklenti açık kaynak kodlu olup çalışma şekli herkes tarafından denetlenebilir. Eklenti kullanıcının bilgisayarı da dahil olmak üzere hiçbir yere kişisel veri kaydetmez. Herhangi bir kişisel veri okumaz, kopyalamaz, göndermez.
-Duyuru metinleri: Eklenti, kapattığı duyuruları pop-up'ında tekrar göstermek amacıyla, YALNIZCA duyuru metinlerini Chrome'unuzun geçici hafızasına kaydeder. Tarayıcıyı kapattığınızda bu duyuru metinleri silinir.
+Eklenti açık kaynak kodlu olup çalışma şekli herkes tarafından denetlenebilir. Eklenti internete hiçbir istek yapmaz. Herhangi bir kişisel veri okumaz, kaydetmez, kopyalamaz, göndermez.
+Duyuru metinleri: Eklenti, kapattığı duyuru metinlerini pop-up'ta göstermek için bu metinleri Chrome'un geçici hafızasında tutar ve bu metinler tarayıcıyı kapattığınızda silinir.
 
 7) Hafiftir:
 Eklenti, tarayıcı performansını etkilemeyecek şekilde son derece hafif bir yapıda tasarlanmıştır. Hiçbir harici kütüphane içermez ve herhangi bir uzak sunucuyla bağlantı kurmaz. Yalnızca Avukat Portal giriş ve ana sayfasında duyuru ve buton aradığında aktif çalışır.

@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundFrequencySelect = document.getElementById('soundFrequencySelect');
     const soundRow = document.getElementById('soundRow');
     const soundFrequencyRow = document.getElementById('soundFrequencyRow');
+    const versionLabel = document.getElementById('versionLabel');
+
+    // Tek doğruluk kaynağı manifest.json: footer'daki sürüm elle yazılmaz.
+    versionLabel.textContent = 'v' + chrome.runtime.getManifest().version;
 
     chrome.runtime.sendMessage({ action: "resetBadge" });
 

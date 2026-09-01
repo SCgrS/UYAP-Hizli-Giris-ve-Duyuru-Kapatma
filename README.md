@@ -9,7 +9,7 @@ Eklenti özetle:
 
 Eklenti simgesine tıklayarak bu 3 özellik de kapatılıp açılabilir. Varsayılan olarak duyuru kapatma ve Pin alanına odaklama açık, menü gizleme kapalıdır.
 
-Eklenti, UYAP duyuruları tekrar tekrar görmemek amacıyla ve girişte gereksiz program uyarısından sıyrılıp Pin Kodu alanına tıklamanın "zorluğundan" kurtulmak için üretilmiştir. Eklenti hiçbir yere, hiçbir veri kaydetmez. İnceleme, özelleştirme, geliştirme yapmak isterseniz tüm kaynak kodları, simgeler dahil Github'dan erişilebilirdir.
+Eklenti, UYAP duyuruları tekrar tekrar görmemek amacıyla ve girişte gereksiz program uyarısından sıyrılıp Pin Kodu alanına tıklamanın "zorluğundan" kurtulmak için üretilmiştir. Eklenti hiçbir kişisel veriyi göremez, okuyamaz, kaydedemez, gönderemez. İnceleme, özelleştirme, geliştirme yapmak isterseniz tüm kaynak kodları, simgeler dahil Github'dan erişilebilirdir.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 

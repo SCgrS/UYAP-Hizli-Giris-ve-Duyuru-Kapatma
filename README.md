@@ -13,6 +13,13 @@ Eklenti, UYAP duyuruları tekrar tekrar görmemek amacıyla ve girişte gereksiz
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 
+Kurulum:
+
+Aşağıdaki linkten Chrome tarayıcınıza ekleyebilirsiniz:
+https://chromewebstore.google.com/detail/lnafoihbnaonnghgjnbmlnpeehojinie
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Eklentinin detaylı özellikleri:
 
 1) Duyuruları kapatır:

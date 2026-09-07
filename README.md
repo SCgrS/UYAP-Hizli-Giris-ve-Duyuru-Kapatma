@@ -1,63 +1,101 @@
-Bu eklenti; bir avukat tarafından, UYAP Avukat Portal'a giriş sürecini hızlandırarak kendisi gibi sabırsız ve UYAP'a tahammülü düşük meslektaşlarının faydalanması amacıyla, açık kaynak kodlu şekilde, Gemini Pro, Claude, GPT kullanılarak üretilmiştir.
+# UYAP Hızlı Giriş ve Duyuru Kapatma
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+UYAP Avukat Portal'a girişi hızlandıran ve her açılışta çıkan duyuru pencerelerini
+kendiliğinden kapatan Chrome eklentisi. Bir avukat tarafından, kendisi gibi sabırsız ve UYAP'a
+tahammülü düşük meslektaşları için açık kaynak olarak yazıldı; resmî bir UYAP ürünü değildir.
 
-Eklenti özetle: 
-1) UYAP Avukat Portaldaki duyuruları otomatik olarak kapatır. Duyuru kapattıysa bunu sesli ve görüntülü bildirir. Simgeye tıklandığında kapatılan duyuru metnini gösterir. 
-2) Adalet e-İmza ile girişi açar, imleci Pin Kodu alanına odaklar.
-3) Sayfa ilk yüklendiğinde menü sekmesi gizlenebilir.
+Eklenti yalnızca `avukat.uyap.gov.tr` adresinde çalışır. İnternete hiçbir istek yapmaz;
+kapattığı duyurunun metni dışında sayfadan hiçbir şey okumaz, kaydetmez, göndermez.
 
-Eklenti simgesine tıklayarak bu 3 özellik de kapatılıp açılabilir. Varsayılan olarak duyuru kapatma ve Pin alanına odaklama açık, menü gizleme kapalıdır.
+## Ne yapar
 
-Eklenti, UYAP duyuruları tekrar tekrar görmemek amacıyla ve girişte gereksiz program uyarısından sıyrılıp Pin Kodu alanına tıklamanın "zorluğundan" kurtulmak için üretilmiştir. Eklenti hiçbir kişisel veriyi göremez, okuyamaz, kaydedemez, gönderemez. İnceleme, özelleştirme, geliştirme yapmak isterseniz tüm kaynak kodları, simgeler dahil Github'dan erişilebilirdir.
+- Giriş sayfasında ve ana sayfada açılan duyuru pencerelerini kendiliğinden kapatır;
+  **Tekrar Gösterme** dediğiniz hâlde yeniden çıkanlar da dahil.
+- Kapattığı her duyuruyu simgedeki kırmızı rozette sayar, isterseniz kısa bir sesle bildirir.
+- Kapatılan duyuruların metnini ve saatini, simgeye tıklayınca listeler (son 20 duyuru).
+- Giriş sayfasında **Adalet E-imza ile Giriş** düğmesine kendisi tıklar ve imleci **Pin Kodu**
+  alanına getirir; sayfa açılır açılmaz Pin yazmaya hazır olursunuz.
+- İsterseniz portalın sol menüsünü her sayfada kendiliğinden daraltır.
+- Her özellik ayrı ayrı, eklentinin tamamı da tek anahtarla açılıp kapatılabilir.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+## Kurulum
 
-Kurulum:
+### [Chrome Web Mağazası'ndan ekle](https://chromewebstore.google.com/detail/lnafoihbnaonnghgjnbmlnpeehojinie)
 
-Aşağıdaki linkten Chrome tarayıcınıza ekleyebilirsiniz:
-https://chromewebstore.google.com/detail/lnafoihbnaonnghgjnbmlnpeehojinie
+1. Bağlantıya tıklayın, açılan sayfada **Chrome'a ekle**'ye basın.
+2. Çıkan küçük pencerede **Uzantı ekle**'ye basın.
+3. Kurulum bitince eklenti kendi karşılama sayfasını açar. Orada anlatıldığı gibi, adres
+   çubuğunun sağındaki **yapboz parçası** simgesine tıklayıp listede eklentinin yanındaki
+   **raptiye** simgesine basın; simge araç çubuğuna sabitlenir. Sabitlemeseniz de eklenti
+   arka planda çalışır, ama rozeti ve duyuru listesini görmek için sabitlemek gerekir.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+Üyelik, e-posta ya da ücret istemez. Kurulumdan sonra yapılacak bir ayar yoktur: duyuru
+kapatma, hızlı giriş ve bildirim sesi açık, menü gizleme kapalı başlar.
 
-Eklentinin detaylı özellikleri:
+### Kaynak koddan
 
-1) Duyuruları kapatır:
-Giriş kısmındaki ve giriş yaptıktan sonraki çıkan tüm duyuruları kapatır. Bu duyurulara "Tekrar Gösterme" butonuna basınca tekrar gösterilen duyurular da dahildir.
+1. Bu depoyu indirin: sağ üstteki **Code > Download ZIP**, sonra dosyayı bir klasöre çıkarın.
+2. Chrome'da adres çubuğuna `chrome://extensions` yazıp Enter'a basın.
+3. Sağ üstteki **Geliştirici modu** anahtarını açın.
+4. **Paketlenmemiş öğe yükle**'ye basıp çıkardığınız klasörü seçin.
 
-2) Duyuruları kapattığını sesli ve görüntülü bildirir:
-Bir duyuru kapattığında eklentinin simgesinde bildirim gözükür. Bu bildirim, kapatılan duyuru sayısını da gösterecek bir numaradır.
-Ayrıca sesli bildirim de verir. Sesli bildirimlerin sıklığının (kaç kapatmada bir sesli uyarı veya her kapatmada sesli uyarı) ayarlanabileceği seçenek de bulunmaktadır.
+### Güncelleme
 
-3) Duyuruları gösterir:
-Bir duyuru kapattığında duyuru metnini gösterir.
-Kapatılan duyuru metnini görmek için eklenti simgesine tıklanması yeterlidir. Ayrıca duyurunun ne zaman kapatıldığını da saniyesine kadar gösterir.
+Mağazadan kurduysanız Chrome yeni sürümü kendisi yükler. Kaynak koddan kurduysanız yeni
+dosyaları aynı klasöre alıp `chrome://extensions` sayfasında eklentinin kartındaki **yenile**
+okuna basın.
 
-4) Giriş Butonuna tıklar ve Pin Kodu alanına odaklanır:
-Giriş ekranında duyuru varsa duyuruyu kapatarak duyuru yoksa doğrudan Adalet E-imza ile Giriş butonuna tıklayıp Pin Kodu bölümüne tıklar. Böylece giriş sayfası açıldığında herhangi bir tıklama olmadan neredeyse anında Pin kodu yazımına hazır hale gelir.
+## Eklenti penceresi
 
-5) Açılıp kapanabilir:
-Eklenti simgesine tıklandığında açılan anahtarlardan istenilen özellik ve doğrudan eklentini kendisi kolaylıkla açılıp kapanabilir.
+Araç çubuğundaki simgeye tıklayınca açılır. Sağ üstteki büyük anahtar eklentinin tamamını
+kapatır; kapalıyken simge gri görünür.
 
-6) Hiçbir veri kaydetmez:
-Eklenti açık kaynak kodlu olup çalışma şekli herkes tarafından denetlenebilir. Eklenti internete hiçbir istek yapmaz. Herhangi bir kişisel veri okumaz, kaydetmez, kopyalamaz, göndermez.
-Duyuru metinleri: Eklenti, kapattığı duyuru metinlerini pop-up'ta göstermek için bu metinleri Chrome'un geçici hafızasında tutar ve bu metinler tarayıcıyı kapattığınızda silinir.
+| Anahtar | Ne yapar |
+| --- | --- |
+| **Hızlı Giriş** | Adalet e-İmza girişine tıklar, Pin alanına odaklanır |
+| **Duyuru Kapatma** | Açılan duyuru pencerelerini otomatik kapatır |
+| **Bildirim Sesi** | Duyuru kapatıldığında kısa bir ses çalar (Duyuru Kapatma'nın altındadır) |
+| **Duyuru Bildirim Sesi Sıklığı** | Aynı duyuru için her kapatmada, 2, 5 ya da 10 kapatmada bir ses çalar; varsayılan 5 |
+| **Menü Gizleme** | Sol menüyü tüm sayfalarda otomatik daraltır/kapatır |
 
-7) Hafiftir:
-Eklenti, tarayıcı performansını etkilemeyecek şekilde son derece hafif bir yapıda tasarlanmıştır. Hiçbir harici kütüphane içermez ve herhangi bir uzak sunucuyla bağlantı kurmaz. Yalnızca Avukat Portal giriş ve ana sayfasında duyuru ve buton aradığında aktif çalışır.
+Altta **Son Kapatılan Duyurular** listesi durur: en yeni üstte, başında kapatıldığı saat.
+Pencereyi açmak rozetteki sayıyı sıfırlar; liste durur.
 
-8) Üyelik, e-posta, ücret istemez:
-Eklenti kullanıma hazırdır. Herhangi bir üye girişi, e-posta bilgisi istenmez. Tamamen ücretsizdir.
+Üç özelliğin hepsini kapatırsanız büyük anahtar da kapanır. Büyük anahtarı yeniden açmak
+Hızlı Giriş ile Duyuru Kapatma'yı açar; Menü Gizleme kapalı kalır, isterseniz ayrıca açarsınız.
+Değişiklikler sayfayı yenilemeden anında uygulanır.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+Ses, eklentinin kendi arka plan sayfasından çalınır: UYAP sekmesi arkada olsa da, başka bir
+sekmedeyken de duyulur.
 
-DİKKAT:
-Eklenti bildirimini görüp tıkladığınız sürece kapatılan duyuruları yukarıda anlatıldığı şekilde rahatlıkla görebileceksiniz. Ancak UYAP duyuruları sizin için önemliyse, eklenti sesli ve görüntülü bildirimleri dikkatinizi çekmeyecekse ve/veya eklenti kullanımına yatkın değilseniz bu eklentinin duyuru kapatma özelliği size uygun değildir.
+## Verileriniz nerede duruyor?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+- Eklentinin istediği izinler: `storage` (ayarlar), `offscreen` (ses) ve yalnızca
+  `avukat.uyap.gov.tr` sayfalarında çalışma. Başka hiçbir siteye erişimi yoktur.
+- Ayarlar (anahtarların durumu, ses sıklığı) Chrome'un eklenti deposunda, bilgisayarınızda durur.
+- Kapatılan duyuru metinleri, saatleri ve rozet sayacı yalnızca oturum belleğinde tutulur;
+  diske yazılmaz, bütün Chrome pencerelerini kapattığınızda silinir.
+- Eklenti internete hiçbir istek yapmaz, harici kütüphane içermez, hiçbir sunucuyla konuşmaz.
+  Kaynak kodun tamamı, simgeler dahil, bu depodadır; isteyen inceleyip değiştirebilir.
 
-x.com/CgrShn 'den benimle iletişime geçebilirsiniz.
+> **Dikkat:** Duyurular UYAP'ın size ulaşma yoludur. Rozeti ve sesi fark edip simgeye
+> tıklamayacaksanız ya da duyurular sizin için önemliyse **Duyuru Kapatma**'yı kapalı tutun;
+> Hızlı Giriş tek başına da çalışır.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+## Kaldırma
 
-Lisans: MIT. Ayrıntılar için LICENSE dosyasına bakınız.
+`chrome://extensions` sayfasında eklentinin kartındaki **Kaldır**'a basın ya da araç
+çubuğundaki simgeye sağ tıklayıp **Chrome'dan kaldır**'ı seçin. Ayarlar eklentiyle birlikte
+silinir.
+
+## Bilinen sınırlar
+
+- Duyuru kapatma yalnızca giriş sayfasında ve ana sayfada (`avukat.uyap.gov.tr/`) çalışır;
+  portalın iç sayfalarında açılan pencerelere dokunmaz.
+- Eklenti sayfada **Kapat** ve **Adalet E-imza** yazılarını arar; portal bu adları
+  değiştirirse yeni sürüm gerekir.
+- Hızlı Giriş, Pin alanına siz yazmaya başladıktan sonra imleci bir daha zorlamaz.
+
+İletişim: [x.com/CgrShn](https://x.com/CgrShn)
+
+Lisans: MIT. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakınız.

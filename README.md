@@ -61,6 +61,10 @@ kapatır; kapalıyken simge gri görünür.
 Altta **Son Kapatılan Duyurular** listesi durur: en yeni üstte, başında kapatıldığı saat.
 Pencereyi açmak rozetteki sayıyı sıfırlar; liste durur.
 
+En alt satırda solda sürüm numarası, ortada **güneş / ay** düğmesi, sağda geliştirici bağlantısı
+vardır. Pencere koyu temayla açılır; güneşe basınca açık temaya geçer, ay ile geri döner. Seçim
+saklanır.
+
 Üç özelliğin hepsini kapatırsanız büyük anahtar da kapanır. Büyük anahtarı yeniden açmak
 Hızlı Giriş ile Duyuru Kapatma'yı açar; Menü Gizleme kapalı kalır, isterseniz ayrıca açarsınız.
 Değişiklikler sayfayı yenilemeden anında uygulanır.

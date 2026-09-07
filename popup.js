@@ -19,6 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tek doğruluk kaynağı manifest.json: footer'daki sürüm elle yazılmaz.
     versionLabel.textContent = 'v' + chrome.runtime.getManifest().version;
 
+    // Tema: varsayılan koyu. Seçim chrome.storage.local "theme" anahtarında durur;
+    // html etiketi zaten data-theme="dark" ile geldiği için açılışta yanıp sönme olmaz.
+    const themeToggle = document.getElementById('themeToggle');
+    const applyTheme = (theme) => {
+        const t = theme === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        themeToggle.title = t === 'dark' ? 'Açık moda geç' : 'Koyu moda geç';
+    };
+    chrome.storage.local.get({ theme: 'dark' }, (data) => applyTheme(data.theme));
+    themeToggle.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        chrome.storage.local.set({ theme: next });
+    });
+
     chrome.runtime.sendMessage({ action: "resetBadge" });
 
     const applyState = (state) => {

@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <title>UYAP Hızlı Giriş</title>
 <style>
-
+  /* Varsayılan tema koyudur; açık tema html[data-theme="light"] ile gelir.
+     Seçim chrome.storage.local "theme" anahtarında saklanır (popup.js). */
   :root {
+    --paper: #16181c;
+    --card: #1f2227;
+    --ink: #e8e6e1;
+    --muted: #9a9ea6;
+    --line: #2f333a;
+    --track: #3a3f47;
+    --knob: #f4f3ef;
+    --go: #34b56c;
+    --go-soft: #17301f;
+    --stop: #e0584b;
+    --stop-soft: #34211e;
+    --hide: #a9b6c6;
+    --hide-soft: #2a3038;
+    --radius: 10px;
+  }
+
+  html[data-theme="light"] {
     --paper: #f2f1ec;
     --card: #ffffff;
     --ink: #1c1f24;
     --muted: #6d7178;
     --line: #e3e1d9;
+    --track: #d6d4cc;
+    --knob: #ffffff;
     --go: #1f8a4c;
     --go-soft: #e6f3ec;
     --stop: #b23a2e;
     --stop-soft: #f7e9e7;
     --hide: #4d5a6b;
     --hide-soft: #eaecef;
-    --radius: 10px;
   }
 
   * { box-sizing: border-box; }
 
-  html { overflow: hidden; }
+  html { overflow: hidden; background: var(--paper); }
 
   /* Popup penceresi en fazla 600px yüksekliğe çıkabilir; bunu aşınca Chrome
      sağda kaydırma şeridi gösterir. Gövdeyi dikey flex yapıp üst sınır
@@ -43,7 +62,7 @@
   }
 
   .mono {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 
   /* ---- header ---- */
@@ -154,7 +173,7 @@
     padding: 3px 5px;
     border-radius: 6px;
     border: 1px solid var(--line);
-    background: #fff;
+    background: var(--card);
     color: var(--ink);
     flex-shrink: 0;
     cursor: pointer;
@@ -166,7 +185,7 @@
   .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
   .track {
     position: absolute; inset: 0;
-    background: #d6d4cc;
+    background: var(--track);
     border-radius: 999px;
     cursor: pointer;
     transition: background .2s ease;
@@ -176,9 +195,9 @@
     position: absolute;
     width: 16px; height: 16px;
     left: 3px; top: 3px;
-    background: #fff;
+    background: var(--knob);
     border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.35);
     transition: transform .2s ease;
   }
   .switch.switch-sm .track::before {
@@ -231,15 +250,41 @@
   #log::-webkit-scrollbar { width: 7px; }
   #log::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
 
+  /* ---- footer: solda sürüm, ortada tema düğmesi, sağda geliştirici ---- */
   footer {
-    text-align: center;
-    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 9.5px;
     color: var(--muted);
-    opacity: 0.65;
-    padding-top: 1px;
+    padding: 3px 2px 0;
     line-height: 1;
     flex-shrink: 0;
   }
+  footer a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--muted);
+  }
+  footer a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .theme-btn {
+    width: 24px; height: 20px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .theme-btn:hover { color: var(--ink); }
+  .theme-btn svg { width: 13px; height: 13px; }
+  /* Koyu temada güneş (açık moda geç), açık temada ay (koyu moda geç) görünür. */
+  .theme-btn .icon-moon { display: none; }
+  html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+  html[data-theme="light"] .theme-btn .icon-moon { display: block; }
 </style>
 </head>
 <body>
@@ -337,8 +382,15 @@
     <div id="log"><div class="empty">Yükleniyor...</div></div>
   </div>
 
-  <!-- Sürüm numarası manifest.json'dan okunur; elle güncellemeye gerek yok. -->
-  <footer class="mono" id="versionLabel"></footer>
+  <footer>
+    <!-- Sürüm numarası manifest.json'dan okunur; elle güncellemeye gerek yok. -->
+    <span class="mono" id="versionLabel"></span>
+    <button type="button" class="theme-btn" id="themeToggle" title="Açık moda geç">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <span>Geliştirici: <a href="https://x.com/CgrShn" target="_blank" rel="noopener">x.com/CgrShn</a></span>
+  </footer>
 
   <script src="popup.js"></script>
 </body>

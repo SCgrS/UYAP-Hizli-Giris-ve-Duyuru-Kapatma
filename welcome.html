@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kurulum tamamlandı — UYAP Hızlı Giriş</title>
 <style>
 
+  /* Koyu tema; renkler popup.html ve UYAP Haciz Yardımcısı ile aynı. */
   :root {
-    --paper: #f2f1ec;
-    --card: #ffffff;
-    --ink: #1c1f24;
-    --muted: #6d7178;
-    --line: #e3e1d9;
-    --go: #1f8a4c;
-    --go-soft: #e6f3ec;
-    --stop: #b23a2e;
-    --stop-soft: #f7e9e7;
+    --paper: #14181c;
+    --card: #1c2126;
+    --ink: #e4e9ed;
+    --muted: #8ca0b3;
+    --line: #2e373f;
+    --line-hover: #3a454f;
+    --btn-hover: #232a31;
+    --go: #2a9a5a;
+    --go-hover: #23864e;
+    --go-soft: #16291c;
+    --stop: #e4473a;
+    --stop-soft: #391c19;
     --radius: 14px;
   }
 
@@ -65,7 +69,7 @@
     font-weight: 600;
     background: var(--stop-soft);
     color: var(--stop);
-    border: 1px solid rgba(178, 58, 46, 0.18);
+    border: 1px solid rgba(228, 71, 58, 0.28);
     margin-bottom: 22px;
     transition: background .25s ease, color .25s ease, border-color .25s ease;
   }
@@ -78,7 +82,7 @@
   .status.done {
     background: var(--go-soft);
     color: var(--go);
-    border-color: rgba(31, 138, 76, 0.2);
+    border-color: rgba(42, 154, 90, 0.35);
   }
   .status.done .dot { animation: none; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
@@ -136,18 +140,18 @@
     padding: 10px 18px;
     border-radius: 9px;
     border: 1px solid var(--line);
-    background: #fff;
+    background: var(--card);
     color: var(--ink);
     cursor: pointer;
     transition: background .15s ease, border-color .15s ease;
   }
-  button:hover { background: #faf9f6; border-color: #d3d0c6; }
+  button:hover { background: var(--btn-hover); border-color: var(--line-hover); }
   button.primary {
     background: var(--go);
     border-color: var(--go);
     color: #fff;
   }
-  button.primary:hover { background: #1a7541; border-color: #1a7541; }
+  button.primary:hover { background: var(--go-hover); border-color: var(--go-hover); }
   button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
   footer {

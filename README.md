@@ -100,6 +100,11 @@ silinir.
   değiştirirse yeni sürüm gerekir.
 - Hızlı Giriş, Pin alanına siz yazmaya başladıktan sonra imleci bir daha zorlamaz.
 
+## Otomatik denetimler
+
+[![CodeQL Advanced](https://github.com/SCgrS/UYAP-Hizli-Giris-ve-Duyuru-Kapatma/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/SCgrS/UYAP-Hizli-Giris-ve-Duyuru-Kapatma/actions/workflows/codeql.yml)\
+[![Dependency Review](https://github.com/SCgrS/UYAP-Hizli-Giris-ve-Duyuru-Kapatma/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/SCgrS/UYAP-Hizli-Giris-ve-Duyuru-Kapatma/actions/workflows/dependency-review.yml)
+
 İletişim: [x.com/CgrShn](https://x.com/CgrShn)
 
 Lisans: MIT. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakınız.

@@ -18,12 +18,27 @@
     let menuHideAttemptsLeft = 0;
     const MENU_HIDE_ATTEMPT_WINDOW = 20;
 
-    chrome.runtime.sendMessage({ action: "getToggleState" }, (response) => {
-        if (response) {
-            masterEnabled = response.masterEnabled;
-            quickLoginEnabled = response.quickLoginEnabled;
-            announcementsEnabled = response.announcementsEnabled;
-            menuHideEnabled = response.menuHideEnabled;
+    // Ayarlar doğrudan chrome.storage.local'dan okunur. Eskiden her UYAP sayfası
+    // açılışında arka plana "getToggleState" iletisi gidiyordu; bu, eklentinin
+    // arka plan sürecini her açılışta uyandırıp 30 saniye ayakta tutuyordu.
+    // Varsayılanlar background.js'teki getDefaultState ile aynıdır.
+    chrome.storage.local.get({
+        masterEnabled: true,
+        quickLoginEnabled: true,
+        announcementsEnabled: true,
+        menuHideEnabled: false
+    }, (state) => {
+        if (state && !chrome.runtime.lastError) {
+            masterEnabled = state.masterEnabled;
+            quickLoginEnabled = state.quickLoginEnabled;
+            announcementsEnabled = state.announcementsEnabled;
+            menuHideEnabled = state.menuHideEnabled;
+        }
+        // Eklenti tamamen kapalıysa arka plan simgeyi gri yapsın diye tek bir
+        // ileti gider. Chrome eklentiyi yeniden açınca simge renkli gelir ve
+        // arka plan uyanmadıkça griye dönmez. Açıkken hiç ileti gitmez.
+        if (!anyFeatureActive()) {
+            chrome.runtime.sendMessage({ action: "refreshIcon" }, () => void chrome.runtime.lastError);
         }
         startScanner();
     });
@@ -184,9 +199,11 @@
                                 const duyuruNode = popupWrapper.querySelector('#duyuruicerik');
                                 if (duyuruNode) {
                                     popupText = duyuruNode.innerText.trim();
-                                } else {
+                                } else if (popupWrapper.matches('.dx-popup-wrapper')) {
                                     popupText = popupWrapper.innerText.replace('Tekrar Gösterme', '').replace('Kapat', '').trim();
                                 }
+                                // Duyuru içeriği olmayan Bootstrap penceresi duyuru değildir;
+                                // metni okunmaz, listede "Bilinmeyen Duyuru" görünür.
                             }
 
                             saveLog(popupText);
@@ -240,10 +257,6 @@
             }, 100);
         }
     };
-
-    new MutationObserver(() => {
-        startScanner();
-    }).observe(document, { subtree: true, childList: true });
 
     startScanner();
 })();

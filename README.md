@@ -80,6 +80,7 @@ sekmedeyken de duyulur.
 - Kapatılan duyuru metinleri, saatleri ve rozet sayacı yalnızca oturum belleğinde tutulur;
   diske yazılmaz, bütün Chrome pencerelerini kapattığınızda silinir.
 - Eklenti internete hiçbir istek yapmaz, harici kütüphane içermez, hiçbir sunucuyla konuşmaz.
+  Kendi pencereleri de bir güvenlik kuralıyla kilitlidir: Dışarıdan resim, stil ya da betik yükleyemez.
   Kaynak kodun tamamı, simgeler dahil, bu depodadır; isteyen inceleyip değiştirebilir.
 
 > **Dikkat:** Duyurular UYAP'ın size ulaşma yoludur. Rozeti ve sesi fark edip simgeye

@@ -1,0 +1,317 @@
+/* UYAP Hızlı Giriş ve Duyuru Kapatma - pencere teması
+   Varsayılan tema koyudur; açık tema html[data-theme="light"] ile gelir.
+   Seçim chrome.storage.local "theme" anahtarında saklanır (popup.js).
+   Stil ayrı dosyadadır: manifestteki güvenlik kuralı (CSP) satır içi stile
+   izin vermez. */
+
+:root {
+  /* Zemin ve kart renkleri UYAP Haciz Yardımcısı ile aynıdır. */
+  --paper: #14181c;
+  --card: #1c2126;
+  --card-2: #232a31;
+  --ink: #e4e9ed;
+  --muted: #8ca0b3;
+  --line: #2e373f;
+  --hair: #29313a;
+  --track: #343e47;
+  --knob: #f4f3ef;
+  --go: #2a9a5a;
+  --stop: #e4473a;
+  --hide: #8ca0b3;
+  /* Simge kutularının zeminleri: renk %14-15, kart rengi %85-86 karışımı.
+     Hazır renk olarak yazıldı, color-mix() Chrome 111'den eski sürümlerde yok. */
+  --go-soft: #1e332e;
+  --stop-soft: #382629;
+  --hide-soft: #2c333a;
+  --radius: 10px;
+
+  /* Satır ölçüleri: ayırıcı çizgiler ve ses bölümü yazının başladığı yerden
+     başlar (soldaki boşluk + simge + aradaki boşluk). */
+  --pad-x: 11px;
+  --glyph: 26px;
+  --glyph-gap: 9px;
+  --indent: calc(var(--pad-x) + var(--glyph) + var(--glyph-gap));
+}
+
+html[data-theme="light"] {
+  --paper: #f2f1ec;
+  --card: #ffffff;
+  --card-2: #f5f4f0;
+  --ink: #1c1f24;
+  --muted: #6d7178;
+  --line: #e3e1d9;
+  --hair: #ebe9e2;
+  --track: #d6d4cc;
+  --knob: #ffffff;
+  --go: #1f8a4c;
+  --stop: #b23a2e;
+  --hide: #4d5a6b;
+  --go-soft: #ddede4;
+  --stop-soft: #f4e3e2;
+  --hide-soft: #e6e8ea;
+}
+
+* { box-sizing: border-box; }
+
+html { overflow: hidden; background: var(--paper); }
+
+/* Popup penceresi en fazla 600px yüksekliğe çıkabilir; bunu aşınca Chrome
+   sağda kaydırma şeridi gösterir. Gövdeyi dikey flex yapıp üst sınır
+   verdiğimizde, taşan tek alan (duyuru listesi) kendi içinde küçülür ve
+   dış kaydırma şeridi hiç oluşmaz. */
+body {
+  width: 392px;
+  max-height: 600px;
+  margin: 0;
+  padding: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* ---- başlık ---- */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 2px 8px;
+  flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
+.brand img { width: 26px; height: 26px; border-radius: 6px; display: block; flex-shrink: 0; }
+.brand-name {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* ---- kartlar ---- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Duyuru listesi kartı: artan/eksilen alanı bu kart üstlenir. */
+.card.log-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px var(--pad-x) 2px;
+  flex-shrink: 0;
+}
+
+/* Her özellik (satırı ve varsa alt ayarları) bir bloktur. Bloklar arasındaki
+   ince çizgi yazının başladığı yerden başlar, simgelerin altından geçmez. */
+.feature + .feature::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-left: var(--indent);
+  background: var(--hair);
+}
+
+.feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px var(--pad-x);
+}
+
+.feature-info { display: flex; align-items: center; gap: var(--glyph-gap); min-width: 0; }
+
+.glyph {
+  width: var(--glyph); height: var(--glyph);
+  border-radius: 7px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.glyph.go { color: var(--go); background: var(--go-soft); }
+.glyph.stop { color: var(--stop); background: var(--stop-soft); }
+.glyph.hide { color: var(--hide); background: var(--hide-soft); }
+.glyph svg { width: 14px; height: 14px; }
+
+.feature-title { font-size: 12.5px; font-weight: 600; line-height: 1.25; }
+.feature-desc { font-size: 10.5px; color: var(--muted); margin-top: 1px; line-height: 1.3; }
+
+/* ---- ses ayarları (Duyuru Kapatma'nın alt bölümü) ----
+   Duyuru Kapatma yazısının hizasından başlar; bu girinti bölümün ona ait
+   olduğunu gösterir. */
+.sub-block {
+  margin: 0 var(--pad-x) 7px var(--indent);
+  background: var(--card-2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Solda başlık ve altında açıklama, sağda düğme; düğme iki satırın ortasında
+   durur. Uzun açıklamalı satırda (.sub-row--wide) düğme yalnız başlık
+   satırındadır, açıklama düğmenin altına da uzanır ve daha az satıra sarar. */
+.sub-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 8px;
+  padding: 5px 9px;
+  transition: opacity .2s ease;
+}
+.sub-row > :not(.sub-title):not(.sub-desc) { grid-column: 2; grid-row: 1 / span 2; }
+.sub-row--wide > :not(.sub-title):not(.sub-desc) { grid-row: 1; }
+.sub-row + .sub-row { border-top: 1px solid var(--hair); }
+.sub-row.dimmed { opacity: 0.42; }
+
+.sub-title { grid-column: 1; font-size: 10.5px; font-weight: 600; line-height: 1.3; }
+.sub-desc {
+  grid-column: 1;
+  font-size: 9.5px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.sub-row--wide .sub-desc { grid-column: 1 / -1; margin-top: 1px; }
+
+.sub-select {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ---- anahtar ---- */
+.switch { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+.switch.switch-sm { width: 32px; height: 18px; }
+.switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.track {
+  position: absolute; inset: 0;
+  background: var(--track);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.track::before {
+  content: "";
+  position: absolute;
+  width: 16px; height: 16px;
+  left: 3px; top: 3px;
+  background: var(--knob);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  transition: transform .2s ease;
+}
+.switch.switch-sm .track::before {
+  width: 12px; height: 12px;
+  left: 3px; top: 3px;
+}
+.switch.switch-xs { width: 26px; height: 15px; }
+.switch.switch-xs .track::before {
+  width: 9px; height: 9px;
+  left: 3px; top: 3px;
+}
+input:checked + .track { background: var(--go); }
+input:checked + .track::before { transform: translateX(16px); }
+.switch.switch-sm input:checked + .track::before { transform: translateX(14px); }
+.switch.switch-xs input:checked + .track::before { transform: translateX(11px); }
+input:focus-visible + .track { outline: 2px solid var(--ink); outline-offset: 2px; }
+input:disabled + .track { opacity: 0.35; cursor: not-allowed; }
+
+/* ---- duyuru listesi ---- */
+/* Liste, ayarlardan kalan bütün yeri alır; gerçek sınırı body'nin 600px'i
+   koyar. Duyuru yokken liste boş mesaj kadar yer kaplar, popup kısalır. */
+#log {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 2px;
+}
+/* Duyuru metni tam olarak yazılır, kırpılmaz. Uzun metinlerde liste
+   kendi içinde kaydırılır. */
+.log-item {
+  margin: 0 var(--pad-x);
+  padding: 6px 0;
+  font-size: 11.5px;
+  line-height: 1.42;
+  overflow-wrap: anywhere;
+}
+.log-item + .log-item { border-top: 1px solid var(--hair); }
+.log-time {
+  font-size: 10px;
+  color: var(--go);
+  margin-right: 6px;
+}
+.empty {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 14px 12px 16px;
+  text-align: center;
+}
+
+#log::-webkit-scrollbar { width: 6px; }
+#log::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+#log::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- alt satır: solda sürüm, ortada tema düğmesi, sağda geliştirici ---- */
+footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 9.5px;
+  color: var(--muted);
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+footer .dev { justify-self: end; white-space: nowrap; }
+
+/* Bağlantı UYAP Haciz Yardımcısı'ndaki gibidir: altı çizgisiz düz yazı,
+   üstüne gelince renklenir ve altı çizilir. */
+footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: color .15s;
+}
+footer a:hover { color: var(--go); text-decoration: underline; }
+
+.theme-btn {
+  width: 24px; height: 20px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, border-color .15s;
+}
+.theme-btn:hover { color: var(--ink); border-color: var(--muted); }
+.theme-btn svg { width: 13px; height: 13px; }
+/* Koyu temada güneş (açık moda geç), açık temada ay (koyu moda geç) görünür. */
+.theme-btn .icon-moon { display: none; }
+html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+html[data-theme="light"] .theme-btn .icon-moon { display: block; }

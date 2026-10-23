@@ -336,6 +336,10 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 // Başlangıç
 refreshBadge();
+// Chrome açılınca arka plan bir kez uyanıp simgeyi ayarlara göre (gri ya da
+// renkli) yapar. content.js artık her sayfada arka planı uyandırmadığı için
+// simge bunu beklemeden doğru görünür.
+chrome.runtime.onStartup.addListener(() => { refreshBadge(); });
 // Eski sürümlerden diskte kalmış olabilecek kayıtları temizle: duyuru
 // metinleri, rozet sayacı ve kapatma sayaçları artık yalnızca oturum
 // belleğinde tutuluyor, chrome.storage.local'de yer almıyor.
@@ -359,6 +363,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         case "getToggleState":
             handleGetToggleState(sendResponse);
+            return true;
+
+        // content.js bunu yalnız eklenti tamamen kapalıyken gönderir.
+        case "refreshIcon":
+            refreshBadge().then(() => sendResponse({ ok: true }), () => sendResponse({ ok: false }));
             return true;
 
         case "setToggleState":

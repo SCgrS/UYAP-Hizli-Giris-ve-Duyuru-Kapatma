@@ -1,7 +1,23 @@
-function escapeHtml(str) {
+// Liste satırları HTML kalıbıyla değil öğe öğe kurulur; duyuru metni yalnızca
+// textContent ve title özelliğine yazılır. Metin ne içerirse içersin (tırnak,
+// etiket) düz yazı olarak görünür, pencereye HTML olarak giremez.
+function emptyRow(text) {
     const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+    div.className = 'empty';
+    div.textContent = text;
+    return div;
+}
+
+function logRow(item) {
+    const text = String(item && item.text != null ? item.text : '');
+    const row = document.createElement('div');
+    row.className = 'log-item';
+    row.title = text;
+    const time = document.createElement('span');
+    time.className = 'log-time mono';
+    time.textContent = String(item && item.time != null ? item.time : '');
+    row.append(time, text);
+    return row;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -81,16 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.runtime.sendMessage({ action: "getLogs" }, (response) => {
         if (chrome.runtime.lastError) {
-            logDiv.innerHTML = '<div class="empty">Bağlantı hatası: ' + escapeHtml(chrome.runtime.lastError.message) + '</div>';
+            logDiv.replaceChildren(emptyRow('Bağlantı hatası: ' + chrome.runtime.lastError.message));
             return;
         }
 
-        if (response && response.logs && response.logs.length > 0) {
-            logDiv.innerHTML = response.logs.slice().reverse().map(item =>
-                `<div class="log-item" title="${escapeHtml(item.text)}"><span class="log-time mono">${escapeHtml(item.time)}</span>${escapeHtml(item.text)}</div>`
-            ).join('');
+        if (response && Array.isArray(response.logs) && response.logs.length > 0) {
+            logDiv.replaceChildren(...response.logs.slice().reverse().map(logRow));
         } else {
-            logDiv.innerHTML = '<div class="empty">Kapatılan bir duyuru yok.</div>';
+            logDiv.replaceChildren(emptyRow('Kapatılan bir duyuru yok.'));
         }
     });
 });

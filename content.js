@@ -176,7 +176,9 @@
                     for (const btn of closeBtns) {
                         if (btn.textContent.trim() === 'Kapat' && btn.offsetParent !== null) {
                             let popupText = "Bilinmeyen Duyuru";
-                            const popupWrapper = btn.closest('.dx-popup-wrapper');
+                            // UYAP duyuruyu önce DevExtreme penceresinde (.dx-popup-wrapper),
+                            // 2026-10'dan beri Bootstrap penceresinde (.modal.duyuru-modal) gösteriyor.
+                            const popupWrapper = btn.closest('.dx-popup-wrapper, .modal');
 
                             if (popupWrapper) {
                                 const duyuruNode = popupWrapper.querySelector('#duyuruicerik');

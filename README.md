@@ -12,7 +12,7 @@ Eklenti yalnızca `avukat.uyap.gov.tr` adresinde çalışır. İnternete hiçbir
 dışında sayfadan hiçbir şey okumaz, kaydetmez, göndermez.
 
 <p align="center">
-  <img src="docs/ekran-pencere.png" width="90%" alt="Eklenti penceresi koyu ve açık temada: Hızlı Giriş, Duyuru Kapatma, Bildirim Sesi ve Menü Gizleme anahtarları, altta Son Kapatılan Duyurular listesinde UYAP'ın her girişte yeniden gösterdiği bir duyuru">
+  <img src="docs/ekran-pencere.png" width="70%" alt="Eklenti penceresi: Hızlı Giriş, Duyuru Kapatma, Bildirim Sesi ve Menü Gizleme anahtarları, altta Son Kapatılan Duyurular listesinde UYAP'ın her girişte yeniden gösterdiği bir duyuru">
 </p>
 
 ## Kurulum

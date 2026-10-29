@@ -57,6 +57,10 @@ Eklenti giriş sayfasında ve ana sayfada açılan duyuru pencerelerini, pencere
 basarak kapatır. **Tekrar Gösterme** dediğiniz hâlde yeniden çıkan duyurular da kapatılır. Kapatılan her duyuru
 simgedeki kırmızı rozette sayılır, metni ve saati eklenti penceresindeki listeye eklenir.
 
+<p align="center">
+  <img src="docs/ekran-rozet.png" width="90%" alt="UYAP ana sayfası açık, duyuru kapatılmış, araç çubuğundaki eklenti simgesinde kırmızı 1 rozeti">
+</p>
+
 **Bildirim Sesi** açıksa duyuru kapatıldığında kısa bir ses çalar. Ses, eklentinin kendi arka plan sayfasından çalınır:
 UYAP sekmesi arkada olsa da, başka bir sekmedeyken de duyulur. Aynı duyuru defalarca çıkıyorsa **Duyuru Bildirim
 Sesi Sıklığı** ile sesin her kapatmada mı, yoksa 2, 5 ya da 10 kapatmada bir mi çalacağı seçilir. Varsayılan 5'tir.
@@ -69,6 +73,10 @@ Sayım bütün Chrome pencereleri kapanınca sıfırlanır.
 
 Giriş sayfasında **Adalet E-imza ile Giriş** düğmesine kendisi tıklar ve imleci **Pin Kodu** alanına getirir. Sayfa
 açılır açılmaz Pin yazmaya hazır olursunuz. Pin kodunu siz yazarsınız.
+
+<p align="center">
+  <img src="docs/ekran-hizli-giris.png" width="90%" alt="UYAP giriş sayfasında Adalet E-İmza ile Giriş penceresi kendiliğinden açılmış, imleç Pin Kodu alanında">
+</p>
 
 ### Menü gizleme
 
